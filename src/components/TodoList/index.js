@@ -1,14 +1,32 @@
 import { TodoList as List } from "./TodoList.styled.js";
 import ToDo from "../ToDo/ToDo.js";
 
-export default function TodoList({ todos }) {
-  const amount = todos.length;
+export default function TodoList({ todos, toggleCheckTodo, children, list }) {
+  const filteredTodos = todos.filter((todo) => {
+    if (list === "notdone") {
+      return todo.isChecked === false;
+    } else {
+      return todo.isChecked === true;
+    }
+  });
+
+  const amount = filteredTodos.length;
   return (
     <>
-      <h2>ToDos to be completed ({amount})</h2>
+      <h2>
+        {children} ({amount})
+      </h2>
       <List>
-        {todos.map((todo) => {
-          return <ToDo title={todo.title} key={todo.id + todo.title} weather={todo.weather}></ToDo>;
+        {filteredTodos.map((todo, index) => {
+          return (
+            <ToDo
+              toggleCheckTodo={toggleCheckTodo}
+              title={todo.title}
+              key={index + todo.title}
+              weather={todo.weather}
+              listId={todo.id}
+            ></ToDo>
+          );
         })}
       </List>
     </>

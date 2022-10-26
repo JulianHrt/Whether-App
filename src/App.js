@@ -9,6 +9,7 @@ function App() {
   const [todos, setTodos] = useState(initialTodos);
   const [weatherStatus, setWeatherStatus] = useState({});
   const [currentFilter, setCurrentFilter] = useState("current");
+  console.log(todos);
 
   useEffect(() => {
     // You do not need to change anything in this useEffect
@@ -52,7 +53,12 @@ function App() {
 
   // Function to fetch the weather data for the user's location
   async function getWeatherData(latitude, longitude) {
-    return 0;
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+    );
+    const data = await response.json();
+    console.log(data.current_weather.weathercode);
+    return data.current_weather.weathercode;
   }
 
   // Function to save the selected weather filter
@@ -77,15 +83,32 @@ function App() {
     }
   }
 
-  const filteredTodos = [];
+  const filteredTodos = [filterTodos(currentFilter)];
+
+  function toggleCheckTodo(listId) {
+    const newArray = todos.map((todo) => {
+      if (todo.id === listId) {
+        return { ...todo, isChecked: !todo.isChecked };
+      } else {
+        return todo;
+      }
+    });
+    console.log(newArray);
+    setTodos(newArray);
+  }
 
   return (
     <>
       <Header />
       <main>
         <InfoBox emoji={weatherStatus.emoji} />
-        {/* <SelectWeather handleChange={handleWeatherSelect} /> */}
-        <TodoList todos={todos} />
+        <SelectWeather handleChange={handleWeatherSelect} />
+        <TodoList todos={todos} toggleCheckTodo={toggleCheckTodo} list="notdone">
+          ToDos to be completed
+        </TodoList>
+        <TodoList todos={todos} toggleCheckTodo={toggleCheckTodo} list="done">
+          Done
+        </TodoList>
       </main>
     </>
   );
