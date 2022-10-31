@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AddTodo from "./components/AddTodo";
 import Header from "./components/Header";
 import InfoBox from "./components/InfoBox";
 import SelectWeather from "./components/SelectWeather";
@@ -9,7 +10,6 @@ function App() {
   const [todos, setTodos] = useState(initialTodos);
   const [weatherStatus, setWeatherStatus] = useState({});
   const [currentFilter, setCurrentFilter] = useState("current");
-  console.log(todos);
 
   useEffect(() => {
     // You do not need to change anything in this useEffect
@@ -71,7 +71,8 @@ function App() {
     switch (currentFilter) {
       case "current":
         return todos.filter(
-          (todo) => todo.weather === weatherStatus.weather || todo.weather === "always"
+          (todo) =>
+            todo.weather === weatherStatus.weather || todo.weather === "always"
         );
       case "always":
       case "good":
@@ -83,7 +84,7 @@ function App() {
     }
   }
 
-  const filteredTodos = [filterTodos(currentFilter)];
+  const filteredTodos = filterTodos(currentFilter);
 
   function toggleCheckTodo(listId) {
     const newArray = todos.map((todo) => {
@@ -93,9 +94,30 @@ function App() {
         return todo;
       }
     });
-    console.log(newArray);
     setTodos(newArray);
   }
+
+  function addTodo(newId, newTitle, newIsCheckedValue, newWeatherState) {
+    setTodos((currentTodos) => {
+      const newTodos = [
+        ...currentTodos,
+        {
+          id: newId,
+          title: newTitle,
+          isChecked: newIsCheckedValue,
+          weather: newWeatherState,
+        },
+      ];
+      return newTodos;
+    });
+  }
+
+  function deleteTodo(id) {
+    const newArray = todos.filter((todo) => todo.id !== id);
+    setTodos(newArray);
+  }
+
+  console.log(todos);
 
   return (
     <>
@@ -103,12 +125,23 @@ function App() {
       <main>
         <InfoBox emoji={weatherStatus.emoji} />
         <SelectWeather handleChange={handleWeatherSelect} />
-        <TodoList todos={todos} toggleCheckTodo={toggleCheckTodo} list="notdone">
+        <TodoList
+          todos={filteredTodos}
+          toggleCheckTodo={toggleCheckTodo}
+          list="notdone"
+          deleteTodo={deleteTodo}
+        >
           ToDos to be completed
         </TodoList>
-        <TodoList todos={todos} toggleCheckTodo={toggleCheckTodo} list="done">
+        <TodoList
+          todos={filteredTodos}
+          toggleCheckTodo={toggleCheckTodo}
+          list="done"
+          deleteTodo={deleteTodo}
+        >
           Done
         </TodoList>
+        <AddTodo addTodo={addTodo}></AddTodo>
       </main>
     </>
   );

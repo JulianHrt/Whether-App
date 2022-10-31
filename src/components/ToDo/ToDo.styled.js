@@ -5,17 +5,26 @@ const ListItem = styled.li`
   ${({ variant }) =>
     variant === "good" &&
     css`
-      background-color: yellow;
+      background-color: #ffdc00;
     `}
   ${({ variant }) =>
     variant === "bad" &&
     css`
-      background-color: blue;
+      background-color: #2ecc40;
     `}
   ${({ variant }) =>
     variant === "always" &&
     css`
-      background-color: green;
+      background-color: #39cccc;
     `}
+
+    display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
-export { ListItem };
+
+const Text = styled.p`
+  font-weight: bold;
+`;
+
+export { ListItem, Text };

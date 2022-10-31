@@ -1,7 +1,13 @@
 import { TodoList as List } from "./TodoList.styled.js";
 import ToDo from "../ToDo/ToDo.js";
 
-export default function TodoList({ todos, toggleCheckTodo, children, list }) {
+export default function TodoList({
+  todos,
+  toggleCheckTodo,
+  children,
+  list,
+  deleteTodo,
+}) {
   const filteredTodos = todos.filter((todo) => {
     if (list === "notdone") {
       return todo.isChecked === false;
@@ -25,6 +31,7 @@ export default function TodoList({ todos, toggleCheckTodo, children, list }) {
               key={index + todo.title}
               weather={todo.weather}
               listId={todo.id}
+              deleteTodo={deleteTodo}
             ></ToDo>
           );
         })}

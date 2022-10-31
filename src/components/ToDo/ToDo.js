@@ -1,6 +1,14 @@
-import { ListItem } from "./ToDo.styled";
+import { ListItem, Text } from "./ToDo.styled";
+import Button from "../Button";
+import Svg from "../Svg";
 
-export default function ToDo({ title, weather, toggleCheckTodo, listId }) {
+export default function ToDo({
+  title,
+  weather,
+  toggleCheckTodo,
+  listId,
+  deleteTodo,
+}) {
   return (
     <ListItem variant={weather}>
       <input
@@ -9,7 +17,10 @@ export default function ToDo({ title, weather, toggleCheckTodo, listId }) {
           toggleCheckTodo(listId);
         }}
       ></input>
-      {title}
+      <Text>{title}</Text>
+      <Button type="button" variant="icon" onClick={() => deleteTodo(listId)}>
+        <Svg variant="delete" color="#fffff" />
+      </Button>
     </ListItem>
   );
 }
